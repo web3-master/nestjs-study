@@ -10,12 +10,16 @@ import {
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
+  @ApiResponse({ status: 201, description: 'The record has been successfully created.', type: CreateUserDto })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
